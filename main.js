@@ -1,8 +1,6 @@
 $(document).ready(function () {
 	$('#beginBtn').click(begin);
-	if(!isMobile()) {
-		$('#lowerButtons').hide();
-	}
+	$('#lowerButtons').hide();
 	$(document).keypress(function (evt) {
 		if(evt.key != lastKey && (evt.key == 'a' || evt.key == 'd' || evt.key == 'j')) {
 			handleInput(evt.key);
@@ -18,8 +16,8 @@ $(document).ready(function () {
 	$('#Dbtn').click(function () {
 		handleInput('d');
 	});
-	$('#Fbtn').click(function () {
-		handleInput('f');
+	$('#Jbtn').click(function () {
+		handleInput('j');
 	});
 });
 var lastKey = '';
@@ -79,6 +77,9 @@ function askQuestion() {
 		var currentWord = 1; //keep track of word printed
 		$('#question').text(tokenized[0]+' ');
 		acceptingInput = true; //set to allow inputs to be registered
+		if(isMobile()) {
+			$('#lowerButtons').show();
+		}
 		printer = window.setInterval(function () {
 			if(currentWord < tokenized.length) {
 				var originalTxt = $('#question').text();
@@ -92,8 +93,12 @@ function askQuestion() {
 	}
 	else {
 		console.log(score);//game over
-		var isRobot = score > 2*questions.length ? 'android' : 'human';
-		alert('Your score is: '+score.toFixed(2)+'\nYou are a: '+isRobot);
+		var isRobot = score > 1.2*questions.length ? 'android' : 'human';
+		alert(
+			'Your score is: '+score.toFixed(2)+'\n'+
+			'You are a(n): '+isRobot+'\n'+
+			'Get a '+(1.2*questions.length).toFixed(2)+' or lower to qualify as human'
+		);
 	}
 }
 var score = 0;
@@ -102,8 +107,8 @@ function handleInput(ch) {
 		var nowTime = Date.now()/1000;
 		var deltaTime = Math.abs(nowTime - perfectTime);
 		if(correctAns != ch) {
-			score += deltaTime;
-			console.log('added '+deltaTime);
+			score += deltaTime*1.5;
+			console.log('added '+deltaTime*1.5);
 		}
 		else {
 			score += deltaTime*0.5;
