@@ -58,7 +58,7 @@ function askQuestion() {
 		window.clearInterval(printer);
 	}
 	if(currentQuestion < questions.length) {
-		$('#qNum').text('Question '+(currentQuestion+1)+': ');
+		$('#qNum').text('Question '+(currentQuestion+1)+'/'+questions.length+': ');
 		//tokenize the question
 		var tokenized = [];
 		var tmp = '';
@@ -75,7 +75,7 @@ function askQuestion() {
 			}
 		}
 		var triggerIndex = $.inArray(qObj.trigger, tokenized);
-		perfectTime = Date.now()/1000+triggerIndex*0.4;
+		perfectTime = Date.now()/1000+triggerIndex*0.3;
 		var currentWord = 1; //keep track of word printed
 		$('#question').text(tokenized[0]+' ');
 		acceptingInput = true; //set to allow inputs to be registered
@@ -88,19 +88,19 @@ function askQuestion() {
 			else {
 				window.clearInterval(printer);
 			}
-		}, 400);
+		}, 300);
 	}
 	else {
 		console.log(score);//game over
-		var isRobot = score < 2*questions.length ? 'android' : 'human';
-		alert('Your score is: '+score+'\nYou are a: '+isRobot);
+		var isRobot = score > 2*questions.length ? 'android' : 'human';
+		alert('Your score is: '+score.toFixed(2)+'\nYou are a: '+isRobot);
 	}
 }
 var score = 0;
 function handleInput(ch) {
 	if(acceptingInput) {
 		var nowTime = Date.now()/1000;
-		var deltaTime = Math.round(Math.abs(nowTime - perfectTime)*100)/100;
+		var deltaTime = Math.abs(nowTime - perfectTime);
 		if(correctAns != ch) {
 			score += deltaTime;
 			console.log('added '+deltaTime);
